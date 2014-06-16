@@ -6,3 +6,6 @@ app/[Cc]onfig/core.php
 app/[Cc]onfig/database.php
 !empty
 _raw/*
+import_icons.tool.php
+import_json.tool.php
+import_oracle.tool.php
