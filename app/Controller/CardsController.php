@@ -149,7 +149,7 @@ class CardsController extends AppController {
 		}
 		
 		// Busca o preço da carta
-		/*$price_url = 'http://magictcgprices.appspot.com/api/tcgplayer/price.json?cardname='.rawurlencode($card['Card']['name_en']);
+		$price_url = 'http://magictcgprices.appspot.com/api/tcgplayer/price.json?cardname='.rawurlencode($card['Card']['name_en']);
 		//.'&cardset='.rawurlencode($card['Set']['set_name_en']);
 		if ($price = file_get_contents($price_url)) {
 			$price = json_decode($price);
@@ -157,8 +157,8 @@ class CardsController extends AppController {
 		} else {
 			$avg_price = NULL;
 		}
-		$this->set('avg_price', $avg_price);*/
-		$this->set('avg_price', 1);
+		$this->set('avg_price', $avg_price);
+		#$this->set('avg_price', 1);
 	}
 	
 	public function ajax() {
