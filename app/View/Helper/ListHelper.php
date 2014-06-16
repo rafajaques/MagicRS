@@ -40,7 +40,7 @@ class ListHelper extends AppHelper {
 							<a href="/cards/view/<?php echo $c['Card']['id']; ?>"><strong><?php echo $c['Card']['name']; ?></strong></a> <small class="text-muted">(<?php echo ($c['Card']['name_en']); ?>)</small>
 							<span class="pull-right"><?php echo $this->Mtg->manaCost($c['Card']['mana_cost']); ?> (<?php echo $c['Card']['cmc']; ?>)</span>
 							<p>
-							<small><?php echo nl2br($c['Card']['text']); ?></small>
+							<small><?php echo nl2br($this->Mtg->manaCostInText($c['Card']['text'])); ?></small>
 							</p>
 						</td>
                         <td><?php echo $this->Mtg->rarity($c['Card']['rarity']); ?></td>

@@ -99,12 +99,12 @@
 		        </tr>
 		        <tr>
 		            <td class="text-right"><strong>Custo de mana</strong></td>
-					<td><?php echo $this->Mtg->manaCost($card['mana_cost']); ?></td>
+					<td><?php echo $this->Mtg->manaCost($card['mana_cost']); ?> &nbsp;&nbsp;&nbsp; <small>Convertido: <?php echo $card['cmc']; ?></td>
 		        </tr>
-		        <tr>
+		        <!--tr>
 		            <td class="text-right"><strong>Custo de mana convertido</strong></td>
 					<td><?php echo $card['cmc']; ?></td>
-		        </tr>
+		        </tr-->
 		        <tr>
 		            <td class="text-right"><strong>Tipo</strong></td>
 					<td><?php echo $card['type']; ?></td>
@@ -121,25 +121,34 @@
 					<td><?php echo $card['loyalty']; ?></td>
 		        </tr>
 				<?php } ?>
-		        <tr>
-		            <td class="text-right"><strong>Artista</strong></td>
-					<td><?php echo $card['artist']; ?></td>
-		        </tr>
+				
+				<?php if (strlen($card['text'])): ?>
 		        <tr>
 		            <td class="text-right"><strong>Texto</strong></td>
-					<td><?php echo nl2br($card['text']); ?></td>
+					<td><?php echo nl2br($this->Mtg->manaCostInText($card['text'])); ?></td>
 		        </tr>
+				<?php endif; ?>
+				
+				<?php if (strlen($card['flavor'])): ?>
 		        <tr>
 		            <td class="text-right"><strong>Flavor</strong></td>
 					<td><em><?php echo nl2br($card['flavor']); ?></em></td>
+		        </tr>
+				<?php endif; ?>
+				
+		        <tr>
+		            <td class="text-right"><strong>Artista</strong></td>
+					<td><?php echo $card['artist']; ?></td>
 		        </tr>
 		    </table>
 		</div><!-- /.box-body -->
 
 		<div class="box-body text-center">
 			<?php
-			if (!$card['uptodate']) {
-				echo '<small class="badge bg-navy">Essa carta ainda não foi consolidada no banco de dados</small>';
+			if ($card['uptodate'] == 0) {
+				echo '<small class="badge bg-navy">Esta carta ainda não foi consolidada no banco de dados</small>';
+			} else if ($card['uptodate'] == 1) {
+				echo '<small class="badge bg-navy">A imagem desta carta ainda não está consolidada no banco de dados</small>';
 			}
 			?>
 		</div>

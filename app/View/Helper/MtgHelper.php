@@ -31,12 +31,31 @@ class MtgHelper extends AppHelper {
 	 */
 	public function manaCost($string, $size = 16) {
 		// Montagem do custo de mana
-		$cost = preg_match_all('/\{(\w+|\d+)\}/', $string, $saida);
+		if (is_array($string)) {
+			$string = $string[0];
+		}
+		$cost = preg_match_all('/\{(\w+\/?\w?)\}/i', $string, $saida);
 		$out = '';
+
 		foreach($saida[1] as $val) {
 			$val = str_replace('/', '', $val);
-			$out .= "<img src=\"http://mtgimage.com/symbol/mana/{$val}/{$size}.png\">";
+			
+			if ($val == 'T' || $val == 'Q')
+				$out .= "<img src=\"http://mtgimage.com/symbol/other/{$val}/{$size}.png\">";
+			else
+				$out .= "<img src=\"http://mtgimage.com/symbol/mana/{$val}/{$size}.png\">";
 		}
+
+		return $out;
+	}
+	
+	/**
+	 * Retorna um custo de mana em imagens
+	 */
+	public function manaCostInText($string, $size = 16) {
+		// Montagem do custo de mana		
+		$out = preg_replace_callback('/(\{\w+\/?\w?\})/i', array($this, 'manaCost'), $string);
+
 		return $out;
 	}
 	

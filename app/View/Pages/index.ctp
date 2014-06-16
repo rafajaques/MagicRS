@@ -43,6 +43,8 @@
 			        <td>
 			        	<ul>
 							<li>Sistema de consulta de preço médio em testes.</li>
+							<li>Traduzidas as cartas da M14 e do bloco de Theros.</li>
+							<li>Adicionados os ícones de mana nos textos das cartas.</li>
 						</ul>
 			        </td>
 			    </tr>
