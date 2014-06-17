@@ -3459,3 +3459,13 @@ fieldset[disabled] .btn-vk.active {
 	-ms-transition: all 1s ease-in-out; 
 	transition: all 1s ease-in-out;
 }
+/* Editar carta */
+.edit-card td{
+   -moz-box-shadow:    inset 0 0 10px #000000;
+   -webkit-box-shadow: inset 0 0 10px #000000;
+   box-shadow:         inset 0 0 10px #000000;
+   background:rgb(70, 70, 70) !important;
+   color:#fff;
+   text-shadow:2px 2px #666;
+
+}

@@ -55,7 +55,7 @@
 								<th width="1%">Anotações</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="card_list">
 							<!-- Optei por colocar valores invisíveis para auxiliar na ordenação -->
 							<?php
 								// Listagem das cartas
@@ -63,7 +63,7 @@
 							?>
                             <tr>
                                 <td>
-									<a href="/cards/view/<?php echo $c['Card']['id']; ?>"><?php echo $c['Card']['name']; ?>
+									<a href="#" rel="<?php echo $c['Card']['id']; ?>"><i class="fa fa-edit"></i> <?php echo $c['Card']['name']; ?></a>
 									<small class="pull-right"><?php
 										// Montagem do custo de mana
 										$cost = preg_match_all('/\{(\w+|\d+)\}/',$c['Card']['mana_cost'],$saida);
@@ -73,7 +73,9 @@
 										}
 									?></small>
 								</td>
-								<td class="text-center"><?php echo $c['UserCard']['quantity']; ?></td>
+								<td class="text-center">
+									<?php echo $c['UserCard']['quantity']; ?>
+								</td>
                                 <td class="text-center"><?php echo $this->Mtg->rarity($c['Card']['rarity']) ?></td>
                                 <td><span class="hide"><?php echo $c['Set']['release']; ?></span><?php echo $c['Set']['code']; ?> <small class="pull-right"><img src="/img/sets_icons/<?php echo $c['Set']['code']; ?>.gif" width="20"></small></td>
 								<td class="text-center"><?php echo $c['Card']['cmc']; ?></td>
@@ -93,9 +95,13 @@
 											echo '<img src="http://mtgimage.com/symbol/mana/g/16.png">';*/
 									?>
                                 </td-->
-                                <td><?php echo $c['UserCard']['have_list'] ? 'Sim' : 'Não'; ?></td>
+                                <td>
+									<?php echo $c['UserCard']['have_list'] ? 'Sim' : 'Não'; ?>
+									<span class="hide" id="orig-have-<?php echo $c['Card']['id']; ?>"><?php echo (bool) $c['UserCard']['have_list']; ?></span>
+								</td>
 								<td class="text-center">
 									<?php if (!empty($c['UserCard']['note'])) { ?>
+									<span class="hide" id="orig-note-<?php echo $c['Card']['id']; ?>"><?php echo $c['UserCard']['note']; ?></span>
 									<button class="btn btn-sm" data-toggle="tooltip" title="<?php echo $c['UserCard']['note']; ?>"><i class="fa fa-pencil"></i></button>
 									<?php } ?>
 								</td>

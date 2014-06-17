@@ -179,4 +179,29 @@ class MycardsController extends AppController {
 		<?php
 		die;
 	}
+	
+	// Ajax
+	public function update() {
+		$this->autoRender = false;
+		
+		if (empty($this->request->data) || !$id = $this->Auth->user('id')) {
+			echo 'NULL';
+			die;
+		}
+		
+		$data = $this->request->data;
+		
+		$save = array(
+			'UserCard.quantity' => intval($data['quantity']),
+			'UserCard.note' => strlen($data['note']) ? '"'.addslashes($data['note']).'"' : NULL,
+			'UserCard.have_list' => (bool) $data['have_list'],
+		);
+
+		$id_card = intval($data['id_card']);
+		$conditions = array('UserCard.id_card' => $id_card, 'UserCard.id_user' => $id);
+		
+		$saved = $this->UserCard->updateAll($save, $conditions);
+		
+		echo $saved;
+	}
 }

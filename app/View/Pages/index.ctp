@@ -37,14 +37,23 @@
 			        <th width="22%">Quando</th>
 			        <th>O quê?</th>
 			    </tr>
-				
+				<tr>
+			        <th>17 de Junho</th>
+			        <td>
+			        	<ul>
+							<li>Edição básica de cartas na coleção/want list.</li>
+						</ul>
+					</td>
+				</tr>
 			    <tr>
-			        <th>15 de Junho</th>
+			        <th>16 de Junho</th>
 			        <td>
 			        	<ul>
 							<li><strong>Enciclopédia:</strong> traduzidas as cartas da M14 e do bloco de Theros.</li>
 							<li>Sistema de consulta de preço médio em testes.</li>
 							<li>Adicionados os ícones de mana nos textos das cartas.</li>
+							<li>Os perfis, coleções, want e have lists agora são públicos.</li>
+							<li>Os perfis agora são acessados com o username do jogador.</li>
 						</ul>
 			        </td>
 			    </tr>
