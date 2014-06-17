@@ -171,7 +171,7 @@ $searchForm = '                    <!-- search form -->
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-flag"></i>
                                 <?php if ($notify_count): ?>
-								<span class="label label-success"><?php echo $notify_count; ?></span>
+								<span class="label label-danger"><?php echo $notify_count; ?></span>
 								<?php endif; ?>
                             </a>
                             <ul class="dropdown-menu">
