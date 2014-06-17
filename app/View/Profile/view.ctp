@@ -10,7 +10,9 @@
 			<img src="<?php echo $profile['avatar_path'] ?>" class="avatar">
 		</div>
         <div class="box-body text-center">
-			<?php if ($is_mine) { ?>
+			<?php if (!$logedin) { ?>
+			<a href="/users/login">Para interagir com <?php echo $profile['name']; ?>, acesse sua conta <i class="fa fa-external-link"></i></a>
+			<?php } elseif ($is_mine) { ?>
 			<a class="btn btn-primary btn-block" href="#editAvatar" data-toggle="modal"><i class="fa fa-camera"></i> Trocar minha foto</a>
 			<a class="btn btn-primary btn-block" href="#editProfile" data-toggle="modal"><i class="fa fa-edit"></i> Editar meu perfil</a>
 			<?php } else { ?>
@@ -70,6 +72,7 @@
 		            <th class="text-right">Cores preferidas</th>
 					<td>&lt;Falta implementação&gt;</td>
 		        </tr>
+				<?php if ($logedin): ?>
 		        <tr>
 		            <th class="text-right">Membro desde</th>
 					<td>&lt;Falta implementação&gt;</td>
@@ -78,6 +81,7 @@
 		            <th class="text-right">Última atividade</th>
 					<td>&lt;Falta implementação&gt;</td>
 		        </tr>
+				<?php endif; ?>
 			</table>
 		</div>
     </div>
@@ -97,7 +101,7 @@
 			<?php else: ?>
 			<label>Últimas cartas adicionadas</label>
 			<?php echo $this->List->simpleTable($profile['have_cards']); ?>
-			<a href="/profile/have/<?php echo $profile['id']; ?>" class="btn btn-block"><i class="fa fa-eye"></i> Visualizar lista completa</a>
+			<a href="/profile/have/<?php echo $profile['username']; ?>" class="btn btn-block"><i class="fa fa-eye"></i> Visualizar lista completa</a>
 			<?php endif; ?>
 		</div>
 	</div>
@@ -115,7 +119,7 @@
 			<?php else: ?>
 			<label>Últimas cartas adicionadas</label>
 			<?php echo $this->List->simpleTable($profile['want_cards']); ?>
-			<a href="/profile/want/<?php echo $profile['id']; ?>" class="btn btn-block"><i class="fa fa-eye"></i> Visualizar lista completa</a>
+			<a href="/profile/want/<?php echo $profile['username']; ?>" class="btn btn-block"><i class="fa fa-eye"></i> Visualizar lista completa</a>
 			
 			<?php endif; ?>
 		</div>
@@ -151,7 +155,7 @@
 				}
 			?>
 		</div>
-			<a href="/profile/cards/<?php echo $profile['id']; ?>" class="btn btn-block"><i class="fa fa-eye"></i> Visualizar lista completa</a>
+			<a href="/profile/cards/<?php echo $profile['username']; ?>" class="btn btn-block"><i class="fa fa-eye"></i> Visualizar lista completa</a>
 		<br>
 	</div>
 	

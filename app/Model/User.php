@@ -79,6 +79,27 @@ class User extends AppModel {
 			return $out['User']['name'];
 	}
 	
+	public function getUserById($id_user) {
+		return $this->find('first', array(
+			'conditions' => array('id' => $id_user),
+		));
+	}
+	
+	public function getUserByUsername($username) {
+		return $this->find('first', array(
+			'conditions' => array('username' => $username),
+		));
+	}
+	
+	public function getIdByUsername($username) {
+		$out = $this->find('first', array(
+			'conditions' => array('username' => $username),
+			'fields' => 'id',
+		));
+		
+		return $out['User']['id'];
+	}
+	
 	public function getAvatar($id_user) {
 		$img = $this->find('first', array(
 			'conditions' => array('id' => intval($id_user)),

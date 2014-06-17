@@ -5,6 +5,8 @@ class ProfileController extends AppController {
 
     public function beforeFilter() {
         parent::beforeFilter();
+		
+		$this->Auth->allow('view', 'have', 'want', 'cards');
 
 		$this->set('title_for_layout', 'Perfil');
     }
@@ -13,7 +15,26 @@ class ProfileController extends AppController {
 		$this->redirect('/profile/view/'.$this->Auth->user('id'));
     }
 
-    public function view($id = null) {
+	private function intToUser($username) {
+		if (is_numeric($username)) {
+			$data = $this->User->getUserById($username);
+			
+			if (!$data)
+				$this->redirect('/');
+
+			$this->redirect("/profile/{$this->request->params['action']}/{$data['User']['username']}");
+		}
+	}
+
+    public function view($username = null) {
+		// Se for ID numérico, transforma em 'username'
+		$this->intToUser($username);
+		
+		// Pega os id do usuário (pelo username)
+		$id = $this->User->getIdByUsername($username);
+		if (!$id)
+			$this->redirect('/');
+		
 		$my_id = $this->Auth->user('id');
 		
 		// Rotinas específicas para meu próprio perfil
@@ -27,7 +48,6 @@ class ProfileController extends AppController {
 		}
 		// Rotinas específicas para visualização geral de perfis
 		else {
-			$this->set('section_for_layout', 'Visualizar perfil');
 	        $this->User->id = $id;
 			$this->set('is_mine', false);
 			
@@ -39,6 +59,9 @@ class ProfileController extends AppController {
 			$user = $this->User->find('first', array('conditions' => array('id' => $id)));
 			$user = $user['User'];
 			unset($user['password']);
+			
+			$this->set('title_for_layout', 'Perfil de '.$user['name'].' '.$user['surname']);
+			$this->set('section_for_layout', 'Visualizar');
 			
 			$this->set('friendship', $this->UserFriend->friendshipStatus($my_id, $id));
 		}
@@ -63,7 +86,15 @@ class ProfileController extends AppController {
 
     }
 	
-	public function cards($id = null) {
+	public function cards($username = null) {
+		if (!$username)
+			$this->redirect('/');
+		
+		// Se for ID numérico, transforma em 'username'
+		$this->intToUser($username);
+		
+		// Pega os id do usuário (pelo username)
+		$id = $this->User->getIdByUsername($username);
 		if (!$id)
 			$this->redirect('/');
 		
@@ -90,10 +121,21 @@ class ProfileController extends AppController {
 		$user = $user['User'];
 		unset($user['password']);
 		
+		$this->set('title_for_layout', 'Coleção de ' . $profile['full_name']);
+		$this->set('section_for_layout', 'Visualizar');
+		
 		//$this->set('')
 	}
 
-	public function have($id = null) {
+	public function have($username = null) {
+		if (!$username)
+			$this->redirect('/');
+		
+		// Se for ID numérico, transforma em 'username'
+		$this->intToUser($username);
+		
+		// Pega os id do usuário (pelo username)
+		$id = $this->User->getIdByUsername($username);
 		if (!$id)
 			$this->redirect('/');
 		
@@ -104,9 +146,20 @@ class ProfileController extends AppController {
 		$this->set('profile', $profile['User']);
 		
 		$this->set('card_list', $this->UserCard->getHaveLasts($id, false));
+
+		$this->set('title_for_layout', 'Have List de ' . $profile['User']['full_name']);
+		$this->set('section_for_layout', 'Visualizar');
 	}
 	
-	public function want($id = null) {
+	public function want($username = null) {
+		if (!$username)
+			$this->redirect('/');
+		
+		// Se for ID numérico, transforma em 'username'
+		$this->intToUser($username);
+		
+		// Pega os id do usuário (pelo username)
+		$id = $this->User->getIdByUsername($username);
 		if (!$id)
 			$this->redirect('/');
 		
@@ -117,6 +170,10 @@ class ProfileController extends AppController {
 		$this->set('profile', $profile['User']);
 		
 		$this->set('card_list', $this->WantList->getCards($id));
+		
+		$user = $profile['User'];
+		$this->set('title_for_layout', 'Have List de ' . $profile['User']['full_name']);
+		$this->set('section_for_layout', 'Visualizar');
 	}
 
 }

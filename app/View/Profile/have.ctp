@@ -6,7 +6,7 @@
             <h3 class="box-title">Have list de <?php echo $profile['full_name']; ?></h3>
         </div>
 		<div class="box-body no-margin">
-			<a href="/profile/view/<?php echo $profile['id']; ?>" class="btn btn-block btn-primary">
+			<a href="/profile/view/<?php echo $profile['username']; ?>" class="btn btn-block btn-primary">
 				<i class="fa fa-user"></i> Ir ao perfil
 			</a>
 		</div>
