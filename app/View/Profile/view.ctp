@@ -4,7 +4,15 @@
 	<!-- Perfil -->
 	<div class="box">
         <div class="box-header">
-            <h3 class="box-title"><?php echo $profile['full_name']; ?></h3>
+            <h3 class="box-title">
+				<?php echo $profile['full_name']; ?>
+				<?php
+					if ($is_online)
+						echo '<small>&nbsp;&nbsp;<i class="fa fa-circle text-success"></i> Online</small>';
+					else
+						echo '<small>&nbsp;&nbsp;<i class="fa fa-circle text-muted"></i> Offline</small>';
+				?>
+			</h3>
         </div>
         <div class="box-body text-center">
 			<img src="<?php echo $profile['avatar_path'] ?>" class="avatar">
@@ -15,9 +23,7 @@
 			<?php } elseif ($is_mine) { ?>
 			<a class="btn btn-primary btn-block" href="#editAvatar" data-toggle="modal"><i class="fa fa-camera"></i> Trocar minha foto</a>
 			<a class="btn btn-primary btn-block" href="#editProfile" data-toggle="modal"><i class="fa fa-edit"></i> Editar meu perfil</a>
-			<?php } else { ?>
-			
-			<?php
+			<?php } else { 
 
 				// Botão de amizade
 				switch($friendship) {
@@ -54,6 +60,14 @@
 		</div>
 		<div class="box-body no-padding">
 		    <table class="table">
+				<?php if (!$is_mine): ?>
+		        <tr>
+		            <th class="text-right">Última atividade</th>
+					<td>
+					<?php echo date('d/m/Y', strtotime($profile['last_seen'])); ?>
+					</td>
+		        </tr>
+				<?php endif; ?>
 		        <tr>
 		            <th width="30%" class="text-right">Cidade</th>
 					<td><?php echo $profile['city']; ?></td>
@@ -75,11 +89,9 @@
 				<?php if ($logedin): ?>
 		        <tr>
 		            <th class="text-right">Membro desde</th>
-					<td>&lt;Falta implementação&gt;</td>
-		        </tr>
-		        <tr>
-		            <th class="text-right">Última atividade</th>
-					<td>&lt;Falta implementação&gt;</td>
+					<td>
+					<?php echo date('d/m/Y', strtotime($profile['created'])); ?>
+					</td>
 		        </tr>
 				<?php endif; ?>
 			</table>

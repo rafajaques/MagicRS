@@ -17,7 +17,7 @@ class ProfileController extends AppController {
 
 	private function intToUser($username) {
 		if (is_numeric($username)) {
-			$data = $this->User->getUserById($username);
+			$data = $this->User->findById($username);
 			
 			if (!$data)
 				$this->redirect('/');
@@ -66,8 +66,11 @@ class ProfileController extends AppController {
 			$this->set('friendship', $this->UserFriend->friendshipStatus($my_id, $id));
 		}
 		
+		$this->set('is_online', $this->User->isOnline($user['id']));
+
 		// Rotinas gerais de perfil
 		$profile = $user;
+
 		$profile['full_name'] = $user['name'].' '.$user['surname'];
 		$profile['collec_count'] = $this->UserCard->count($user['id']);
 		$profile['city'] = $this->City->getName($user['id_city']);

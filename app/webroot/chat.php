@@ -52,7 +52,11 @@ if (!isset($_SESSION['openChatBoxes'])) {
 }
 
 function chatHeartbeat() {
-	
+
+	// Atualiza o 'last_seen'
+	$sql = 'UPDATE users SET last_seen = NOW() WHERE username = "'.$_SESSION['username'].'"';
+	$query = mysql_query($sql);
+		
 	$sql = "select * from chat where (chat.to = '".mysql_real_escape_string($_SESSION['username'])."' AND recd = 0) order by id ASC";
 	$query = mysql_query($sql);
 	$items = '';

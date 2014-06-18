@@ -9,13 +9,13 @@ class User extends AppModel {
             'required' => array(
                 'rule' => array('notEmpty'),
                 'message' => 'É necessário digitar seu nome'
-            )
+            ),
         ),
         'surname' => array(
             'required' => array(
                 'rule' => array('notEmpty'),
                 'message' => 'É necessário digitar seu sobrenome'
-            )
+            ),
         ),
         'email' => array(
             'required' => array(
@@ -49,14 +49,13 @@ class User extends AppModel {
             'required' => array(
                 'rule' => array('notEmpty'),
                 'message' => 'É necessária escolher uma senha',
-            )
+            ),
         ),
         'id_city' => array(
             'required' => array(
                 'rule' => array('notEmpty'),
                 'message' => 'Escolha uma cidade',
-				// @TODO implementar escolha na lista das cidades disponíveis
-            )
+            ),
         ),
     );
 	
@@ -77,18 +76,6 @@ class User extends AppModel {
 			return $out['User']['name'].' '.$out['User']['surname'];
 		else
 			return $out['User']['name'];
-	}
-	
-	public function getUserById($id_user) {
-		return $this->find('first', array(
-			'conditions' => array('id' => $id_user),
-		));
-	}
-	
-	public function getUserByUsername($username) {
-		return $this->find('first', array(
-			'conditions' => array('username' => $username),
-		));
 	}
 	
 	public function getIdByUsername($username) {
@@ -145,4 +132,48 @@ class User extends AppModel {
 			),
 		));
 	}
+	
+	public function isOnline($id_user) {
+		$id_user = intval($id_user);
+		$out = $this->query("SELECT COUNT(*) AS `count`
+							FROM `users` AS `User`
+							WHERE `id` = {$id_user} AND
+							`last_seen` > DATE_SUB(NOW(), INTERVAL 10 SECOND)");
+		
+		return $out[0][0]['count'];
+	}
+	
+	/**
+	 * Provavelmente vai cair fora se o chat não for atualizado para o cake
+	 * @deprecated
+	 */
+	public function heartbeat($id_user) {
+		$this->updateAll(
+			array('last_seen' => 'NOW()'),
+			array('id' => $id_user)
+		);
+		
+		return true;
+	}
+	
+	public function persist($id_user, $remove = false) {
+		if ($remove) {
+			$this->updateAll(
+				array('persistent' => NULL),
+				array('id' => $id_user)
+			);
+
+			return true;
+		}
+		
+		$hash = uniqid(rand(), true);
+
+		$this->updateAll(
+			array('persistent' => "'{$hash}'"),
+			array('id' => $id_user)
+		);
+
+		return $hash;
+	}
+	
 }

@@ -42,6 +42,9 @@
 			        <td>
 			        	<ul>
 							<li>Edição básica de cartas na coleção/want list.</li>
+							<li>Opção de login persistente.</li>
+							<li>Os perfis agora indicam se a pessoa está online.</li>
+							<li>Implementadas informações adicionais sobre os usuários.</li>
 						</ul>
 					</td>
 				</tr>

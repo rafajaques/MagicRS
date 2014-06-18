@@ -8,6 +8,7 @@
     </p>
 </div>
 <!-- Esquerda -->
+<!-- Busca -->
 <section class="col-lg-5">
 	<div class="box box-primary">
         <div class="box-header">
@@ -84,7 +85,9 @@
 		</div>
     </div>
 </section>
+
 <!-- Direita -->
+<!-- Lista - Meus amigos -->
 <section class="col-lg-7">
 	<div class="box box-info">
         <div class="box-header">
@@ -107,11 +110,18 @@
 					$name = $f['User']['name'].' '.$f['User']['surname'];
 					$city = $f['City']['city_name'];
 					$nick = $f['User']['username'];
+					$is_online = $f['online'];
 					?>
 
                 <tr>
                     <td><img src="<?php echo $this->User->getAvatar($id); ?>" width="70"></td>
                     <td>
+						<?php
+							if ($is_online)
+								echo '<small><i class="fa fa-circle text-success"></i></small>';
+							else
+								echo '<small><i class="fa fa-circle text-muted"></i></small>';
+						?>
 						<a href="/profile/view/<?php echo $id; ?>">
 							<?php echo $name; ?>
 						</a>

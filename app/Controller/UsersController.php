@@ -1,7 +1,8 @@
 <?php
 // app/Controller/UsersController.php
 class UsersController extends AppController {
-	var $uses = array('User', 'City');
+	public $uses = array('User', 'City');
+	public $components = array('Cookie');
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -79,23 +80,43 @@ class UsersController extends AppController {
             throw new NotFoundException(__('Invalid user'));
         }
         if ($this->User->delete()) {
-            $this->Session->setFlash('Usuário removido', 'default', array(), 'success');
+            $this->setFlash('Usuário removido', 'success');
             $this->redirect(array('action' => 'index'));
         }
-        $this->Session->setFlash('Usuário não removido', 'default', array(), 'error');
+        $this->setFlash('Usuário não removido', 'error');
         $this->redirect(array('action' => 'index'));
     }
 
 	public function login() {
-		$this->set('section_for_layout', __('Identifique-se'));
+		$this->set('section_for_layout', 'Identifique-se');
 		
 	    if ($this->Auth->login()) {
+			// Configura a persistência
+			if (isset($this->request->data['User']['persist']) && $this->request->data['User']['persist'])
+				$this->makePersist();
+			
+			// Grava o username na sessão pra ser usado pelo chat
 			$this->Session->write('username', $this->Auth->user('username'));
+			
+			// Redireciona :)
 	        $this->redirect($this->Auth->redirect());
+	    } elseif ($this->request->data) {
+	    	$this->setFlash('Nome de usuário ou senha inválidos.', 'error');
 	    }
+	}
+	
+	public function makePersist() {
+		$hash = $this->User->persist($this->Auth->user('id'));
+		$this->Cookie->write('mtgrsp', $hash, null, '7 days');
+	}
+	
+	public function removePersist() {
+		$this->User->persist($this->Auth->user('id'), true); // true para apagar
+		$this->Cookie->delete('mtgrsp');
 	}
 
 	public function logout() {
+		$this->removePersist();
 	    $this->redirect($this->Auth->logout());
 	}
 }

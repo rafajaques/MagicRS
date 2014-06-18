@@ -2,7 +2,7 @@
 
 class FriendsController extends AppController {
 	
-	public $uses = array('UserFriend');
+	public $uses = array('User', 'UserFriend');
 	
 	public function beforeFilter() {
 		parent::beforeFilter();
@@ -12,7 +12,13 @@ class FriendsController extends AppController {
 	public function index() {
 		$this->set('section_for_layout', 'Lista de amigos');
 
-		$this->set('friends', $this->User->getFriends($this->Auth->user('id')));
+		$friends = $this->User->getFriends($this->Auth->user('id'));
+		
+		foreach ($friends as $k => $v) {
+			$friends[$k]['online'] = $this->User->isOnline($v['User']['id']);
+		}
+
+		$this->set('friends', $friends);
 
 		if (isset($this->request->data['search'])) {
 			$words = explode(' ', $this->request->data['search']);

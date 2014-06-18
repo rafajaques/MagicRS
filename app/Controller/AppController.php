@@ -36,7 +36,8 @@ class AppController extends Controller {
 		'Auth' => array(
 			'loginRedirect' => array('controller' => 'pages', 'action' => 'index'),
 			'logoutRedirect' => array('controller' => 'pages', 'action' => 'index')
-		)
+		),
+		'Cookie',
 	);
 	
 	public $uses = array(
@@ -45,18 +46,33 @@ class AppController extends Controller {
 	);
 
 	function beforeFilter() {
+		// Verifica o cookie de autenticação
+		if ($this->Cookie->check('mtgrsp') && !$this->Auth->user()) {
+			$autoLogin = $this->User->findAllByPersistent($this->Cookie->read('mtgrsp'));
+
+			// Checa se alguém modificou o cookie
+			if (count($autoLogin) > 1)
+				$this->Cookie->delete('mtgrsp');
+			// Autentica o indivíduo :)
+			elseif ($autoLogin)
+				$this->Auth->login($autoLogin[0]['User']);
+		}
+		
 		// Se temos um usuário autenticado...
 		if ($user = $this->Auth->user()) {
 			$this->set('user', $user);
 			$this->set('avatar', $this->User->getAvatar($user['id']));
+			
+			// Last seen + renew persist
+			# $this->User->heartbeat($user);
 		}
 		
+		// Envia as variáveis para a aplicação
 		$this->set('logedin', (bool) $user);
 		$this->set('projectName', 'Magic RS');
 		
-		$un = &$this->UserNotification;
-		
 		// Verifica se tem alguma notificação pra marcar como lida
+		$un = &$this->UserNotification;
 		if (isset($this->request->query['n'])) {
 			$n = intval($this->request->query['n']);
 			$un->readNotification($n, $user['id']);

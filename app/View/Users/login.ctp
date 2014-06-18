@@ -27,9 +27,17 @@
 					'class' => 'form-group',
 				),
 			));
+			
+	        echo $this->Form->input('persist', array(
+				'label' => ' Mantenha-me conectado <small>(não recomendado em computadores compartilhados)</small>',
+				'type' => 'checkbox',
+				'checked' => true,
+				'div' => array(
+					'class' => 'form-group checkbox',
+				),
+			));
     ?>
     </fieldset>
-	<br>
 	<?php
 		echo $this->Form->end(array(
 			'label' => __('Acessar'),
