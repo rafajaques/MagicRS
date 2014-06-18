@@ -54,10 +54,10 @@ if (!isset($_SESSION['openChatBoxes'])) {
 function chatHeartbeat() {
 
 	// Atualiza o 'last_seen'
-	$sql = 'UPDATE users SET last_seen = NOW() WHERE username = "'.$_SESSION['username'].'"';
+	$sql = 'UPDATE users SET last_seen = NOW() WHERE username = "'.$_SESSION['Auth']['User']['username'].'"';
 	$query = mysql_query($sql);
 		
-	$sql = "select * from chat where (chat.to = '".mysql_real_escape_string($_SESSION['username'])."' AND recd = 0) order by id ASC";
+	$sql = "select * from chat where (chat.to = '".mysql_real_escape_string($_SESSION['Auth']['User']['username'])."' AND recd = 0) order by id ASC";
 	$query = mysql_query($sql);
 	$items = '';
 
@@ -128,7 +128,7 @@ EOD;
 	}
 }
 
-	$sql = "update chat set recd = 1 where chat.to = '".mysql_real_escape_string($_SESSION['username'])."' and recd = 0";
+	$sql = "update chat set recd = 1 where chat.to = '".mysql_real_escape_string($_SESSION['Auth']['User']['username'])."' and recd = 0";
 	$query = mysql_query($sql);
 
 	if ($items != '') {
@@ -173,7 +173,7 @@ function startChatSession() {
 header('Content-type: application/json');
 ?>
 {
-		"username": "<?php echo $_SESSION['username'];?>",
+		"username": "<?php echo $_SESSION['Auth']['User']['username'];?>",
 		"items": [
 			<?php echo $items;?>
         ]
@@ -186,7 +186,7 @@ header('Content-type: application/json');
 }
 
 function sendChat() {
-	$from = $_SESSION['username'];
+	$from = $_SESSION['Auth']['User']['username'];
 	$to = $_POST['to'];
 	$message = $_POST['message'];
 

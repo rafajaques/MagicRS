@@ -6,21 +6,12 @@ This script may be used for non-commercial purposes only. For any
 commercial purposes, please contact the author at 
 anant.garg@inscripts.com
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
-
 */
 
 var windowFocus = true;
 var username;
 var chatHeartbeatCount = 0;
-var minChatHeartbeat = 1000;
+var minChatHeartbeat = 3000;
 var maxChatHeartbeat = 33000;
 var chatHeartbeatTime = minChatHeartbeat;
 var originalTitle;
@@ -31,7 +22,7 @@ var newMessages = new Array();
 var newMessagesWin = new Array();
 var chatBoxes = new Array();
 
-$(document).ready(function(){
+$(function(){
 	originalTitle = document.title;
 	startChatSession();
 
@@ -324,7 +315,7 @@ function checkChatBoxInputKey(event,chatboxtextarea,chatboxtitle) {
 	 
 }
 
-function startChatSession(){  
+function startChatSession(){
 	$.ajax({
 	  url: "chat.php?action=startchatsession",
 	  cache: false,

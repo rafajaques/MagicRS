@@ -83,7 +83,7 @@ class User extends AppModel {
 			'conditions' => array('username' => $username),
 			'fields' => 'id',
 		));
-		
+
 		return $out['User']['id'];
 	}
 	
