@@ -65,6 +65,11 @@ class AppController extends Controller {
 			
 			// Last seen + renew persist
 			# $this->User->heartbeat($user);
+			
+			// Puxa os amigos online
+			$friends_online = $this->User->getFriendsOnline($user['id']);
+			$this->set('friends_online', $friends_online);
+			$this->set('friends_online_count', count($friends_online));
 		}
 		
 		// Envia as variáveis para a aplicação

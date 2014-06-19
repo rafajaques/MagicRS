@@ -22,6 +22,7 @@
 															'empty' => 'Todas as coleções',
 															'label' => '',
 															'class' => 'form-control',
+															'showParents' => true,
 														)); ?>
 			</div>
 		    <div class="form-group"> 

@@ -138,7 +138,7 @@ class User extends AppModel {
 		$out = $this->query("SELECT COUNT(*) AS `count`
 							FROM `users` AS `User`
 							WHERE `id` = {$id_user} AND
-							`last_seen` > DATE_SUB(NOW(), INTERVAL 10 SECOND)");
+							`last_seen` > DATE_SUB(NOW(), INTERVAL 20 SECOND)");
 		
 		return $out[0][0]['count'];
 	}
@@ -174,6 +174,16 @@ class User extends AppModel {
 		);
 
 		return $hash;
+	}
+	
+	public function getFriendsOnline($id) {
+		$out = $this->query("SELECT User.id, User.name, User.surname, User.username
+							FROM `users` AS `User`
+							LEFT JOIN `users_friends` as `Friend`
+							ON (`User`.`id` = `Friend`.`id_friend`)
+							WHERE `Friend`.`id_user` = {$id} AND
+							`last_seen` > DATE_SUB(NOW(), INTERVAL 20 SECOND)");
+		return $out;
 	}
 	
 }

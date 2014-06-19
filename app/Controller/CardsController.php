@@ -17,7 +17,9 @@ class CardsController extends AppController {
 		$this->set('section_for_layout', __('Principal'));
 
 		// Busca todas as coleções
-		$this->set('sets', $this->Set->find('list', array('order' => 'release DESC')));
+		$sets = $this->Set->getAll();
+//		debug($sets);die;
+		$this->set('sets', $sets);
 		
 		if ($this->request->is('post') && $this->request->data) {
 			if (isset($this->request->data['quick'])) {

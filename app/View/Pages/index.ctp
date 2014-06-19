@@ -38,6 +38,25 @@
 			        <th>O quê?</th>
 			    </tr>
 				<tr>
+					<th>19 de Junho</th>
+					<td>
+						<ul>
+							<li><strong>Enciclopédia:</strong> adicionadas 6ª e 7ª edições, Unglued e os blocos de Invasão, Masques e Urza.</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
+			        <th>18 de Junho</th>
+			        <td>
+			        	<ul>
+							<li><strong>Enciclopédia:</strong> adicionadas 8ª, 9ª e 10ª edições, Unhinged, Coldsnap e os blocos de Lorwyn-Shadowmoor, Time Spiral, Ravnica, Kamigawa, Mirrodin e Investida.</li>
+							<li>Sistema de notificação de amigos online.</li>
+							<li>Alguns bugs de estabilidade no chat corrigidos.</li>
+							<li>Atualizada a busca para agrupar as coleções por blocos.</li>
+							<li>Limite da busca aumentado para 100 resultados.</li>
+						</ul>
+					</td>
+				</tr>
 			        <th>17 de Junho</th>
 			        <td>
 			        	<ul>

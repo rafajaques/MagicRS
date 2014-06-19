@@ -81,10 +81,10 @@
 		            <td class="text-right"><strong>Valor médio</strong></td>
 					<td>
 						<?php
-						if (is_numeric($avg_price)) {
+						if (is_numeric($avg_price) && $avg_price > 0) {
 							echo 'R$ ' . number_format($avg_price, 2, ',', '.');
 						} else {
-							echo 'Indisponível - Tente novamente';
+							echo 'Indisponível';
 						}
 						?>
 					</td>
