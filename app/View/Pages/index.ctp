@@ -41,7 +41,7 @@
 					<th>19 de Junho</th>
 					<td>
 						<ul>
-							<li><strong>Enciclopédia:</strong> adicionadas 6ª e 7ª edições, Unglued e os blocos de Invasão, Masques e Urza.</li>
+							<li><strong>Enciclopédia:</strong> adicionadas Alpha, Beta, 3ª, 4ª, 5ª, 6ª e 7ª edições, Early Sets, Unglued e os blocos de Invasão, Masques e Urza, Miragem e Era Glacial.</li>
 						</ul>
 					</td>
 				</tr>
