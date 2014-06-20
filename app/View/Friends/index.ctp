@@ -25,7 +25,7 @@
 						));
 					?>
 				    <span class="input-group-btn">
-				        <input type="submit" class="btn btn-primary btn-flat" value="Buscar cartas">
+				        <input type="submit" class="btn btn-primary btn-flat" value="Pesquisar">
 				    </span>
 				</div><!-- /input-group -->
 			</form>

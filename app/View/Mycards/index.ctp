@@ -47,11 +47,11 @@
                             <tr>
                                 <th>Carta</th>
 								<th width="1%">Qtd</th>
+								<th width="1%">Troca</th>
                                 <th width="15%">Raridade</th>
                                 <th>Coleção</th>
                                 <th width="1%">CMC</th>
 								<!--th>Cor</th-->
-                                <th>Have list</th>
 								<th width="1%">Anotações</th>
                             </tr>
                         </thead>
@@ -64,6 +64,10 @@
                             <tr>
                                 <td>
 									<a href="#" rel="<?php echo $c['Card']['id']; ?>"><i class="fa fa-edit"></i> <?php echo $c['Card']['name']; ?></a>
+									<?php
+									if ($c['UserCard']['foil']) echo '<i class="fa fa-star" title="Carta Foil" alt="Carta Foil"></i>';
+									?>
+
 									<small class="pull-right"><?php
 										// Montagem do custo de mana
 										$cost = preg_match_all('/\{(\w+|\d+)\}/',$c['Card']['mana_cost'],$saida);
@@ -76,8 +80,12 @@
 								<td class="text-center">
 									<?php echo $c['UserCard']['quantity']; ?>
 								</td>
+                                <td>
+									<?php echo $c['UserCard']['have_list']; ?>
+									<span class="hide" id="orig-have-<?php echo $c['Card']['id']; ?>"><?php echo $c['UserCard']['have_list']; ?></span>
+								</td>
                                 <td class="text-center"><?php echo $this->Mtg->rarity($c['Card']['rarity']) ?></td>
-                                <td><span class="hide"><?php echo $c['Set']['release']; ?></span><?php echo $c['Set']['code']; ?> <small class="pull-right"><img src="/img/sets_icons/<?php echo $c['Set']['code']; ?>.gif" width="20"></small></td>
+                                <td><span class="hide"><?php echo $c['Set']['release']; ?></span><?php echo $c['Set']['code']; ?> <small class="pull-right"><img src="/img/sets_icons/<?php echo $c['Set']['code']; ?>.gif" width="20" alt="<?php echo $c['Set']['set_name']; ?>" title="<?php echo $c['Set']['set_name']; ?>"></small></td>
 								<td class="text-center"><?php echo $c['Card']['cmc']; ?></td>
                                 <!--td>
                                 	<?php
@@ -95,10 +103,6 @@
 											echo '<img src="http://mtgimage.com/symbol/mana/g/16.png">';*/
 									?>
                                 </td-->
-                                <td>
-									<?php echo $c['UserCard']['have_list'] ? 'Sim' : 'Não'; ?>
-									<span class="hide" id="orig-have-<?php echo $c['Card']['id']; ?>"><?php echo (bool) $c['UserCard']['have_list']; ?></span>
-								</td>
 								<td class="text-center">
 									<?php if (!empty($c['UserCard']['note'])) { ?>
 									<span class="hide" id="orig-note-<?php echo $c['Card']['id']; ?>"><?php echo $c['UserCard']['note']; ?></span>
@@ -115,11 +119,11 @@
                             <tr>
                                 <th>Carta</th>
 								<th>Qtd</th>
+								<th>Troca</th>
                                 <th>Raridade</th>
                                 <th>Coleção</th>
                                 <th>CMC</th>
 								<!--th>Cor</th-->
-                                <th>Have list</th>
 								<th>Anotações</th>
                             </tr>
                         </tfoot>

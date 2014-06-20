@@ -36,11 +36,13 @@
 				<!-- Botões para autenticados -->
 				
 				<!-- Tem a carta -->
-				<?php if ($hasCard) { ?>
-				<a class="btn btn-app bg-green" href="/mycards"><i class="fa fa-check"></i> Você tem essa carta</a>
-				<?php } else { ?>
-				<a class="btn btn-app" data-toggle="modal" href="#myCards"><i class="fa fa-plus"></i> Minha coleção</a>
-				<?php } ?>
+				<!--a class="btn btn-app bg-green" href="/mycards"><i class="fa fa-check"></i> Você tem essa carta</a-->
+				<a class="btn btn-app" data-toggle="modal" href="#myCards">
+					<?php if ($hasCard): ?>
+					<span class="badge bg-green"><?php echo $hasCard; ?></span>
+					<?php endif; ?>
+					<i class="fa fa-plus"></i> Minha coleção/have list
+				</a>
 				
 				<!-- Want List -->
 				<?php if ($wantCard) { ?>
@@ -242,7 +244,13 @@
       <h4 class="modal-title">Adicionar carta à coleção</h4>
     </div>
     <div class="modal-body">
-		<p>Deseja adicionar <strong><?php echo $card['name']; ?></strong> à sua coleção?</p>
+		<?php if ($hasCard): ?>
+		<div class="callout callout-info">
+            <h4>Esta carta já está em seus registros</h4>
+            <p>Já que esta carta está presente de alguma forma (foil ou não foil) em sua coleção, realize adições/alterações com cautela. Inserções duplicadas serão substituídas.</p>
+        </div>
+		<?php endif; ?>
+		<p>Deseja adicionar <strong><?php echo $card['name']; ?></strong> à sua coleção?</p>	
 		<br>
 		<div class="col-lg-3">
 			<img src="<?php echo $this->Mtg->imageByMultiverseId($card['multiverseid']); ?>" height="150">
@@ -266,26 +274,47 @@
 				));
 				?>
 				<br>
+				<!-- Para negócio -->
+				<?php
+				echo $this->Form->input('have_list', array(
+					'label' => 'Quantas estão pra negócio?',
+					'class' => 'form-control',
+					'type' => 'number',
+					'pattern' => '\d*',
+					'value' => 0,
+				));
+				?>
+				<small>Sua have list é sempre pública. Colocar a carta nessa lista indica que ela está disponível para venda ou troca.</small>
+				<br><br>
+				<!-- Foil -->
+				<?php
+				echo $this->Form->input('foil', array(
+					'label' => ' <strong>Carta foil/metalizada</strong>',
+					'type' => 'checkbox',
+				));
+				?>
+				<small>As cartas foil são armazenadas em registros separados das cartas comuns. Se você possui dois tipos da mesma carta, adicione duas vezes à sua coleção.</small>
+				<br><br>
 				<!-- Anotações -->
 			    <label for="note">Anotações</label>
 				<?php
 				echo $this->Form->textarea('note', array(
 					'class' => 'form-control',
-					'placeholder' => 'Essas anotações são visíveis somente para você. Elas ficam disponibilizadas junto com a carta na sua coleção pessoal. As anotações são opcionais.',
+					'placeholder' => 'Estas anotações são visíveis somente para você. Elas ficam disponibilizadas junto com a carta na sua coleção pessoal. As anotações são opcionais.',
 					'rows' => 4,
 				));
 				?>
-				<br>
-				<!-- Have list -->
-	            <div class="checkbox">
-	                <label>
-	                    <input type="checkbox" name="have_list" value="1" />
-	                    Disponibilizar essa carta na minha <strong>have list</strong>.
-	                </label> 
-	 			   <br><small>Sua have list é sempre pública. Colocar a carta nessa lista indica que ela está disponível para venda ou troca.</small>
-	            </div>
 		</div>
-		<div class="clear">&nbsp;</div>
+
+		<div class="clear">
+			<br>
+			Você sabia que é possível adicionar diversas cartas ao mesmo tempo em sua coleção?
+			<br>
+			<a href="/mycards">Visite a sua página de cartas</a>.
+			<br><br>
+			<strong class="text-danger">Atenção:</strong> Se você adicionar uma carta que já está registrada, por exemplo reinserindo uma carta foil, os dados serão atualizados pelos novos.
+		</div>
+
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>

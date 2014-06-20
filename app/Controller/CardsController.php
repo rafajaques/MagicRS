@@ -18,7 +18,7 @@ class CardsController extends AppController {
 
 		// Busca todas as coleções
 		$sets = $this->Set->getAll();
-//		debug($sets);die;
+
 		$this->set('sets', $sets);
 		
 		if ($this->request->is('post') && $this->request->data) {
@@ -137,7 +137,7 @@ class CardsController extends AppController {
 		$this->set('title_for_layout', $card['Card']['name']);
 		
 		// Puxa a lista de haves
-		$this->set('haves', $this->UserCard->getHavesByName($card['Card']['name'], $this->Auth->user('id')));
+		$this->set('haves', $this->UserCard->getHavesByName($card['Card']['name_en'], $this->Auth->user('id')));
 		
 		// Verifica se o usuário está autenticado
 		if ($user_id = $this->Auth->user('id')) {

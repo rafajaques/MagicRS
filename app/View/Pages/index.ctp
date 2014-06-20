@@ -44,6 +44,7 @@
 							<li><strong>Enciclopédia:</strong> implementada opção de navegar pelas reimpressões de uma carta.</li>
 							<li>Corrigido bug de nomes repetidos no type-hint da busca rápida.</li>
 							<li>Limite de buscas aumentado para 200.</li>
+							<li>Agora é possível indicar a quantidade de cartas da coleção, a quantidade de trocas e se a carta é foil ou não.</li>
 						</ul>
 					</td>
 				</tr>

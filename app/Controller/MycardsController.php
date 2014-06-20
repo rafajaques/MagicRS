@@ -39,9 +39,10 @@ class MycardsController extends AppController {
 				'UserCard.quantity',
 				'UserCard.note',
 				'UserCard.have_list',
+				'UserCard.foil',
 				'Set.name as set_name',
 				'Set.code as code',
-				'Set.release'
+				'Set.release',
 			),
 			'order' => 'Card.name ASC, Set.release DESC',
 		));
@@ -60,6 +61,10 @@ class MycardsController extends AppController {
 		$this->request->data['added'] = date('Y-m-d H:i:s');
         
 		if ($this->request->is('post')) {
+			// Remove a carta caso já esteja no banco
+			$this->UserCard->remove($this->request->data);
+				
+			// Cria a nova inserção
             $this->UserCard->create();
 			
 			// Salva os dados
@@ -194,14 +199,34 @@ class MycardsController extends AppController {
 		$save = array(
 			'UserCard.quantity' => intval($data['quantity']),
 			'UserCard.note' => strlen($data['note']) ? '"'.addslashes($data['note']).'"' : NULL,
-			'UserCard.have_list' => (bool) $data['have_list'],
+			'UserCard.have_list' => $data['have_list'],
 		);
 
 		$id_card = intval($data['id_card']);
-		$conditions = array('UserCard.id_card' => $id_card, 'UserCard.id_user' => $id);
+		$conditions = array(
+			'UserCard.id_card' => $id_card,
+			'UserCard.id_user' => $id,
+			'UserCard.foil' => $data['foil'],
+		);
 		
 		$saved = $this->UserCard->updateAll($save, $conditions);
 		
 		echo $saved;
+	}
+	
+	
+	public function remove() {
+		if (!isset($this->request->data['id_card']))
+			$this->redirect('/');
+
+		$this->UserCard->remove(array(
+			'id_user' => $this->Auth->user('id'),
+			'id_card' => $this->request->data['id_card'],
+			'foil' => intval($this->request->data['foil']),
+		));
+		
+		$this->setFlash('Carta removida com sucesso!', 'success');
+		
+		$this->redirect('/mycards');
 	}
 }

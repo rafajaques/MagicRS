@@ -15,14 +15,28 @@ class UserCard extends AppModel {
 	);
 	
 	public function hasCard($user, $card) {
-		$out = $this->find('count', array(
+		$out = $this->find('all', array(
 			'conditions' => array(
 				'id_user' => $user,
 				'id_card' => $card,
 			),
+			'fields' => array(
+				'(SUM(quantity) + SUM(have_list)) AS total'
+			),
 		));
 		
-		return (bool) $out;
+		return $out[0][0]['total'];
+	}
+	
+	public function remove($data) {
+		$this->deleteAll(
+			array(
+				'id_user' => $data['id_user'],
+				'id_card' => $data['id_card'],
+				'foil' => $data['foil'],
+			),
+			false
+		);
 	}
 	
 	public function haveListCount($user) {
@@ -206,7 +220,7 @@ class UserCard extends AppModel {
 			'conditions' => array(
 				'UserCard.have_list' => 1,
 				'User.active' => 1,
-				'Card.name' => $card_name,
+				'Card.name_en' => $card_name,
 				'User.id !=' => $my_id,
 			),
 			'order' => array(
