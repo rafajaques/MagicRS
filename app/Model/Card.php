@@ -45,6 +45,7 @@ class Card extends AppModel {
 			),
 			'fields' => array('name'),
 			'limit' => $limit,
+			'group' => 'name',
 		));
 		$en = $this->find('list', array(
 			'conditions' => array(
@@ -52,10 +53,11 @@ class Card extends AppModel {
 			),
 			'fields' => array('name_en'),
 			'limit' => $limit,
+			'group' => 'name_en',
 		));
 		
 		$out = array_merge($pt, $en);
-		
+
 		sort($out);
 		
 		return $out;
