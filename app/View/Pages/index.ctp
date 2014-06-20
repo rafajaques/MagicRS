@@ -41,6 +41,7 @@
 			        <th>20 de Junho</th>
 			        <td>
 			        	<ul>
+							<li><strong>Enciclopédia:</strong> implementada opção de navegar pelas reimpressões de uma carta.</li>
 							<li>Corrigido bug de nomes repetidos no type-hint da busca rápida.</li>
 							<li>Limite de buscas aumentado para 200.</li>
 						</ul>
