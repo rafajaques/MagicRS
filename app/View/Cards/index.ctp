@@ -29,7 +29,7 @@
 	           <div class="checkbox">
 				   <label>
 	                   <input type="checkbox" name="have" value="1"<?php if (isset($sHave)) echo $sHave; ?> />
-	                   Buscar apenas cartas que estejam em <strong>have lists</strong> da região
+	                   Buscar apenas cartas que estejam em <strong>have lists</strong>
 	               </label>                                                
 	           </div>
 		    </div>

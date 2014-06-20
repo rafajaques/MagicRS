@@ -50,19 +50,23 @@ class CardsController extends AppController {
 
 			// Faz a busca das cartas
 			$filter = array(
-				'limit' => 100, #período de testes
+				'limit' => 200, #período de testes
 				'conditions' => array(
 					'OR' => array(
 						'Card.name like' => "%{$this->request->data['text']}%",
 						'Card.name_en like' => "%{$this->request->data['text']}%",
 					),
 				),
-				'joins' => array(array(
-					'table' => 'sets',
-					'alias' => 'Set',
-					'type' => 'LEFT',
-					'conditions' => array('Card.id_set = Set.id'),
-				)),
+				'joins' => array(
+					array(
+						'table' => 'sets',
+						'alias' => 'Set',
+						'type' => 'LEFT',
+						'conditions' => array('Card.id_set = Set.id'),
+					),
+					// Pegar sempre a coleção mais recente
+					'LEFT JOIN (SELECT `InSet`.`id`, MAX(`InSet`.`release`) `release` FROM `sets` AS `InSet` GROUP BY `InSet`.`id`) AS `t2` ON `Set`.`id` = `t2`.`id` AND `Set`.`release` = `t2`.`release`',
+				),
 				'fields' => array(
 					'Card.*',
 					'COUNT(Card.name_en) as `sets_qtd`',
