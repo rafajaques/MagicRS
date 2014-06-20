@@ -43,9 +43,23 @@ class ListHelper extends AppHelper {
 							<small><?php echo nl2br($this->Mtg->manaCostInText($c['Card']['text'])); ?></small>
 							</p>
 						</td>
+						<!-- Raridade -->
                         <td><?php echo $this->Mtg->rarity($c['Card']['rarity']); ?></td>
+						<!-- Tipo -->
 						<td><?php echo $c['Card']['type']; ?></td>
-                        <td><span class="hide"><?php echo $c['Set']['release']; ?></span><small><?php echo $c['Set']['set_name']; ?></small> <small class="pull-right"><img src="/img/sets_icons/<?php echo $c['Set']['code']; ?>.gif" width="20"></small></td>
+						<!-- Coleção -->
+                        <td class="text-center">
+							<span class="hide"><?php echo $c['Set']['release']; ?></span>
+							<?php
+								$sets = explode(';', $c[0]['multi_codes']);
+								foreach ($sets as $s) {
+									$s = explode(',', $s);
+									?>
+									<img src="/img/sets_icons/<?php echo $s[0]; ?>.gif" title="<?php echo $s[1]; ?>">
+									<?php
+								}
+							?>
+						</td>
 						<td><?php echo $c['Card']['cmc']; ?></td>
                     </tr>
 					<?php

@@ -38,6 +38,15 @@
 			        <th>O quê?</th>
 			    </tr>
 				<tr>
+			        <th>20 de Junho</th>
+			        <td>
+			        	<ul>
+							<li>Corrigido bug de nomes repetidos no type-hint da busca rápida.</li>
+							<li>Limite de buscas aumentado para 200.</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
 					<th>19 de Junho</th>
 					<td>
 						<ul>

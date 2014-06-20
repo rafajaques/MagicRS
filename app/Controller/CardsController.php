@@ -65,11 +65,17 @@ class CardsController extends AppController {
 				)),
 				'fields' => array(
 					'Card.*',
+					'COUNT(Card.name_en) as `sets_qtd`',
+					'GROUP_CONCAT(Set.code, \',\', Set.name ORDER BY Set.release DESC SEPARATOR \';\') as multi_codes',
 					'Set.name as set_name',
 					'Set.code as code',
 					'Set.release'
 				),
-				'order' => 'Card.name ASC',
+				'order' => array(
+					'Card.name ASC',
+					'Set.release DESC',
+				),
+				'group' => 'Card.name_en',
 			);
 
 			// Refina o filtro
@@ -115,27 +121,13 @@ class CardsController extends AppController {
 		}
 		
 		// Busca a carta
-		$card = $this->Card->find('first', array(
-			'conditions' => array(
-				'Card.id' => $card_id,
-			),
-			'joins' => array(array(
-				'table' => 'sets',
-				'alias' => 'Set',
-				'type' => 'LEFT',
-				'conditions' => array('Card.id_set = Set.id'),
-			)),
-			'fields' => array(
-				'Card.*',
-				'Set.name as set_name',
-				'Set.name_en as set_name_en',
-				'Set.code as code',
-				'Set.release',
-			),
-		));
+		$card = $this->Card->getCard($card_id);
 		
 		$this->set('card', $card['Card']);
 		$this->set('set', $card['Set']);
+		
+		// Busca as reimpressões
+		$this->set('reprints', $this->Card->getReprints($card_id));
 		
 		// Adiciona o nome da carta no título da página
 		$this->set('title_for_layout', $card['Card']['name']);

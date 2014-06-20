@@ -81,8 +81,8 @@
         <h3 class="box-title">Resultado da sua busca por <strong><?php echo $this->request->data['text'];?></strong></h3>		
     </div><!-- /.box-header -->
 	<div class="box-body">
-		<?php if (($count = count($card_list)) == 100) { ?>
-		<p>Foram encontrados <strong>100 resultados ou mais</strong>. No período de testes esse é o máximo disponibilizado na busca para não sobrecarregar o servidor.</p>
+		<?php if (($count = count($card_list)) == 200) { ?>
+		<p>Foram encontrados <strong>200 resultados ou mais</strong>. No período de testes esse é o máximo disponibilizado na busca para não sobrecarregar o servidor.</p>
 		<?php } elseif ($count == 1) { ?>
 		<p>Foi encontrado <strong>1</strong> resultado:</p>
 		<?php } else { ?>

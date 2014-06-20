@@ -8,6 +8,58 @@ class Card extends AppModel {
 	
 	public $uses = array('Set');
 	
+	public function getCard($id) {
+		return $this->find('first', array(
+			'conditions' => array(
+				'Card.id' => $id,
+			),
+			'joins' => array(array(
+				'table' => 'sets',
+				'alias' => 'Set',
+				'type' => 'LEFT',
+				'conditions' => array('Card.id_set = Set.id'),
+			)),
+			'fields' => array(
+				'Card.*',
+				'Set.name as set_name',
+				'Set.name_en as set_name_en',
+				'Set.code as code',
+				'Set.release',
+			),
+		));
+	}
+	
+	public function getReprints($id) {
+		$name = $this->find('first', array(
+			'conditions' => array(
+				'Card.id' => $id,
+			),
+			'fields' => 'name_en',
+		));
+		
+		if (!isset($name['Card']['name_en']))
+			return false;
+		
+		return $this->find('all', array(
+			'conditions' => array(
+				'Card.id !=' => $id,
+				'Card.name_en' => $name['Card']['name_en'],
+			),
+			'joins' => array(array(
+				'table' => 'sets',
+				'alias' => 'Set',
+				'type' => 'LEFT',
+				'conditions' => array('Card.id_set = Set.id'),
+			)),
+			'fields' => array(
+				'Card.id',
+				'Set.name as set_name',
+				'Set.code as code',
+			),
+			'order' => 'release DESC',
+		));
+	}
+	
 	public function getCardByName($name) {
 		$name = trim($name);
 		return $this->find('first', array(

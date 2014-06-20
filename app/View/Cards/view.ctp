@@ -73,9 +73,30 @@
         </div>
 		<div class="box-body no-padding">
 		    <table class="table">
+				
+				<!-- P/T/Loyalty -->
+				<?php if (isset($card['power']) && isset($card['toughness'])) { ?>
 		        <tr>
-		            <td width="30%" class="text-right"><strong>Suas anotações</strong></td>
-					<td>&lt;Falta implementação&gt;</td>
+		            <td class="text-right"><strong>Poder / Resistência</strong></td>
+					<td><?php echo "{$card['power']} / {$card['toughness']}"; ?></td>
+		        </tr>
+				<?php } ?>
+				<?php if (isset($card['loyalty'])) { ?>
+		        <tr>
+		            <td class="text-right"><strong>Lealdade</strong></td>
+					<td><?php echo $card['loyalty']; ?></td>
+		        </tr>
+				<?php } ?>
+				
+				<!-- Custo de mana -->
+		        <tr>
+		            <td class="text-right"><strong>Custo de mana</strong></td>
+					<td><?php echo $this->Mtg->manaCost($card['mana_cost']); ?> &nbsp;&nbsp;&nbsp; <small>Convertido: <?php echo $card['cmc']; ?></td>
+		        </tr>
+				
+		        <tr>
+		            <td width="30%" class="text-right"><strong>Raridade</strong></td>
+					<td><?php echo $this->Mtg->rarity($card['rarity']); ?></td>
 		        </tr>
 		        <tr>
 		            <td class="text-right"><strong>Valor médio</strong></td>
@@ -89,38 +110,32 @@
 						?>
 					</td>
 		        </tr>
-		        <tr>
-		            <td width="30%" class="text-right"><strong>Raridade</strong></td>
-					<td><?php echo $this->Mtg->rarity($card['rarity']); ?></td>
-		        </tr>
+				
 		        <tr>
 		            <td width="30%" class="text-right"><strong>Coleção</strong></td>
 					<td><img src="/img/sets_icons/<?php echo $set['code']; ?>.gif"> <?php echo $set['set_name']; ?></td>
 		        </tr>
+				<?php if (count($reprints)): ?>
 		        <tr>
-		            <td class="text-right"><strong>Custo de mana</strong></td>
-					<td><?php echo $this->Mtg->manaCost($card['mana_cost']); ?> &nbsp;&nbsp;&nbsp; <small>Convertido: <?php echo $card['cmc']; ?></td>
+		            <td width="30%" class="text-right"><strong>Reimpressões</strong></td>
+					<td>
+						<?php 
+						foreach ($reprints as $r) {
+							?>
+							<a href="/cards/view/<?php echo $r['Card']['id']; ?>">
+							<img src="/img/sets_icons/<?php echo $r['Set']['code']; ?>.gif">
+							</a>
+							<?php
+						}
+						?>
+					</td>
 		        </tr>
-		        <!--tr>
-		            <td class="text-right"><strong>Custo de mana convertido</strong></td>
-					<td><?php echo $card['cmc']; ?></td>
-		        </tr-->
+				<?php endif; ?>
+
 		        <tr>
 		            <td class="text-right"><strong>Tipo</strong></td>
 					<td><?php echo $card['type']; ?></td>
 		        </tr>
-				<?php if (isset($card['power']) && isset($card['toughness'])) { ?>
-		        <tr>
-		            <td class="text-right"><strong>Poder / Resistência</strong></td>
-					<td><?php echo "{$card['power']} / {$card['toughness']}"; ?></td>
-		        </tr>
-				<?php } ?>
-				<?php if (isset($card['loyalty'])) { ?>
-		        <tr>
-		            <td class="text-right"><strong>Lealdade</strong></td>
-					<td><?php echo $card['loyalty']; ?></td>
-		        </tr>
-				<?php } ?>
 				
 				<?php if (strlen($card['text'])): ?>
 		        <tr>
@@ -139,6 +154,12 @@
 		        <tr>
 		            <td class="text-right"><strong>Artista</strong></td>
 					<td><?php echo $card['artist']; ?></td>
+		        </tr>
+				
+				<!-- Anotações -->
+		        <tr>
+		            <td width="30%" class="text-right"><strong>Suas anotações</strong></td>
+					<td>&lt;Falta implementação&gt;</td>
 		        </tr>
 		    </table>
 		</div><!-- /.box-body -->
