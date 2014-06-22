@@ -51,11 +51,18 @@ class ListHelper extends AppHelper {
                         <td class="text-center">
 							<span class="hide"><?php echo $c['Set']['release']; ?></span>
 							<?php
-								$sets = explode(';', $c[0]['multi_codes']);
-								foreach ($sets as $s) {
-									$s = explode(',', $s);
+								// Várias impressões?
+								if (isset($c[0]['multi_codes'])) {
+									$sets = explode(';', $c[0]['multi_codes']);
+									foreach ($sets as $s) {
+										$s = explode(',', $s);
+										?>
+										<img src="/img/sets_icons/<?php echo $s[0]; ?>.gif" title="<?php echo $s[1]; ?>">
+										<?php
+									}
+								} else {
 									?>
-									<img src="/img/sets_icons/<?php echo $s[0]; ?>.gif" title="<?php echo $s[1]; ?>">
+									<img src="/img/sets_icons/<?php echo $c['Set']['code']; ?>.gif" title="<?php echo $c['Set']['set_name']; ?>">
 									<?php
 								}
 							?>

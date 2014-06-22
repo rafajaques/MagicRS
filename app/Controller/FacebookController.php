@@ -10,7 +10,7 @@ class FacebookController extends AppController {
 	}
 	
 	public function index() {
-		
+		$this->set('section_for_layout', 'Facebook');
 	}
 	
 }
