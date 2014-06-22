@@ -29,6 +29,7 @@
         </div>
         <div class="box-body text-center">
 			<a href="/mycards/bulk" class="btn btn-block btn-primary"><i class="fa fa-plus-circle"></i> Adicionar várias cartas à coleção</a>
+			<a href="/mycards/import" class="btn btn-block btn-primary"><i class="glyphicon glyphicon-import"></i> Importar lista de cartas do Deckbox</a>
 			<a href="/mycards/want" class="btn btn-block btn-primary"><i class="fa fa-list-ul"></i> Gerenciar want list</a>
 		</div>
     </div>

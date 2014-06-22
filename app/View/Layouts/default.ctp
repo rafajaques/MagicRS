@@ -50,6 +50,7 @@ $searchForm = '                    <!-- search form -->
         <script src="/js/AdminLTE/app.js" type="text/javascript"></script>
         <!-- Main JS -->
         <script src="/js/main.js" type="text/javascript"></script>
+		<script src="/js/facebook.sdk.js" type="text/javascript"></script>
 		<?php if ($logedin): ?>
         <!-- Chat -->
         <script src="/js/chat.js" type="text/javascript"></script>

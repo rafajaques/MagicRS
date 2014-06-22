@@ -90,6 +90,28 @@ class Card extends AppModel {
 		));
 	}
 	
+	/**
+	 * Tenta encontrar uma carta por um setname
+	 * Se não encontrar, procura a carta sem o setname
+	 * Se não der mesmo assim, retorna falso
+	 */
+	public function match($card) {
+		return (bool) $this->find('first', array(
+			'condtions' => array(
+				'Card.name_en' => $card['name_en'],
+				'Set.name_en' => $card['set_name_en'],
+			),
+			'joins' => array(
+				array(
+					'table' => 'sets',
+					'alias' => 'Set',
+					'type' => 'LEFT',
+					'conditions' => array('Card.id_set = Set.id'),
+				),
+			),
+		));
+	}
+	
 	public function suggest($str, $limit = 10) {
 		$pt = $this->find('list', array(
 			'conditions' => array(

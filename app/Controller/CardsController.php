@@ -22,31 +22,9 @@ class CardsController extends AppController {
 		$this->set('sets', $sets);
 		
 		if ($this->request->is('post') && $this->request->data) {
-			if (isset($this->request->data['quick'])) {
-				
-				$quick_string = $this->request->data['quicksearch'];
-				// Se veio da busca rápida, verifica se existe apenas
-				// uma correspondência.
-				// Caso exista mais de uma, realiza uma busca e
-				// mostra todos os resultados
-				$unique_id = $this->Card->find('all', array(
-					'conditions' => array(
-						'OR' => array(
-							'Card.name LIKE' => "%{$quick_string}%",
-							'Card.name_en LIKE' => "%{$quick_string}%",
-						),
-					),
-					'fields' => 'id',
-				));
-				
-				// Deu certo! Apenas uma carta! :)
-				if (count($unique_id) == 1) {
-					$this->redirect('/cards/view/'.$unique_id[0]['Card']['id']);
-				}
-				
-				// Caso não tenha redirecionado, planta o valor da busca aqui
-				$this->request->data['text'] = $quick_string;
-			}
+			// Caso não tenha redirecionado, planta o valor da busca aqui
+			if (isset($this->request->data['quick']))
+				$this->request->data['text'] = $this->request->data['quicksearch'];
 
 			// Faz a busca das cartas
 			$filter = array(
@@ -110,6 +88,10 @@ class CardsController extends AppController {
 					$this->set('s'.ucfirst($color), 'checked="checked"');
 			
 			$cards = $this->Card->find('all', $filter);
+			
+			if (count($cards) == 1)
+				$this->redirect('/cards/view/'.$cards[0]['Card']['id']);
+			
 			$this->set('card_list', $cards);
 		}
 	}
@@ -147,11 +129,21 @@ class CardsController extends AppController {
 		}
 		
 		// Busca o preço da carta
-		$price_url = 'http://magictcgprices.appspot.com/api/tcgplayer/price.json?cardname='.rawurlencode($card['Card']['name_en']);
-		//.'&cardset='.rawurlencode($card['Set']['set_name_en']);
-		if ($price = file_get_contents($price_url)) {
+		$price_url = 'http://magictcgprices.appspot.com/api/tcgplayer/price.json?cardname='.rawurlencode($card['Card']['name_en']).'&cardset='.rawurlencode($card['Set']['set_name_en']);
+		// try & catch couldn't help it :(
+		@$price = file_get_contents($price_url);
+		
+		// Couldn't retrieve price
+		if ($price == '["", "", ""]') {
+			// Search without set
+			$price_url = 'http://magictcgprices.appspot.com/api/tcgplayer/price.json?cardname='.rawurlencode($card['Card']['name_en']);
+			// try & catch couldn't help it :(
+			@$price = file_get_contents($price_url);
+		}
+
+		if ($price) {
 			$price = json_decode($price);
-			$avg_price = substr($price[0], 1) + substr($price[1], 1) + substr($price[2], 1);
+			$avg_price = substr(str_replace(',', '', $price[0]), 1) + substr(str_replace(',', '', $price[1]), 1) + substr(str_replace(',', '', $price[2]), 1);
 		} else {
 			$avg_price = NULL;
 		}
@@ -166,9 +158,12 @@ class CardsController extends AppController {
 			$q = $this->request->query['query'];
 			
 			// Prepara a resposta ajax, devolvendo a consulta e as sugestões
+			$suggestions = array_unique($this->Card->suggest($q));
+			sort($suggestions);
+			
 			$out = array(
 				'query' => $q,
-				'suggestions' => $this->Card->suggest($q),
+				'suggestions' => $suggestions,
 			);
 			
 			echo json_encode($out);

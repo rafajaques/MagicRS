@@ -214,6 +214,91 @@ class MycardsController extends AppController {
 		echo $saved;
 	}
 	
+	public function import() {
+		$this->set('section_for_layout', 'Importar');
+		if ($this->request->is('post')) {
+			$this->autoRender = false;
+
+			if (isset($this->request->data['import']) && !$this->request->data['import']['error'] && $this->request->data['import']['type'] == 'text/csv' && $this->request->data['import']['size'] > 0) {
+				$csv = fopen($this->request->data['import']['tmp_name'], 'r');
+				
+				// Verifica se está tudo aí
+				$header = fgetcsv($csv);
+				$h = array();
+				
+				foreach ($header as $k => $v) {
+					switch ($v) {
+						case 'Count':
+							$h['quantity'] = $k;
+							break;
+						case 'Tradelist Count':
+							$h['have_list'] = $k;
+							break;
+						case 'Name':
+							$h['name_en'] = $k;
+							break;
+						case 'Foil':
+							$h['foil'] = $k;
+							break;
+						case 'Edition':
+							$h['set_name_en'] = $k;
+							break;
+					}
+				}
+
+				// Headers ok?
+				if (count($h) != 5) {
+					$this->setFlash('Não foi possível importar os dados do arquivo enviado. Para que a importação ocorra com sucesso é necessário haver os cabeçalhos: Count, Tradelist Count, Name, Foil e Edition.', 'error');
+					$this->redirect('/mycards/import');
+				}
+				
+				// Prepara os statements
+				$imports = array();
+				while ($c = fgetcsv($csv)) {
+					if (!isset($c[$h['name_en']]) || empty($c[$h['name_en']]))
+						continue;
+					
+					$out = array(
+						'name_en' => $c[$h['name_en']],
+						'quantity' => isset($c[$h['quantity']]) ? intval($c[$h['quantity']]) : 0,
+						'have_list' => isset($c[$h['have_list']]) ? intval($c[$h['have_list']]) : 0,
+						'foil' => isset($c[$h['foil']]) && $c[$h['foil']] ? 1 : 0,
+						'set_name_en' => isset($c[$h['set_name_en']]) ? $c[$h['set_name_en']] : '',
+					);
+					$imports[] = $out;
+				}
+				
+				fclose($csv);
+				
+				debug($imports);die;
+				
+				$saved = $ignore = 0;
+				
+				$id_user = $this->Auth->user('id');
+				
+				// Realiza as importações
+				foreach ($imports as $c) {
+					if ($id_card = $this->Card->match($c) && !$this->UserCard->hasCard($id_user, $c['id_card'])) {
+						$uc = $this->UserCard->create();
+						$data = array('UserCard' => $c);
+			
+						$this->UserCard->save($data);
+						$saved++;
+					} else {
+						$ignored++;
+					}
+				}
+				
+				$this->setFlash("Cartas inseridas com sucesso. <small>(Salvas: {$saved} - Ignoradas: {$ignored})</small>", 'success');
+				$this->redirect('/mycards');
+			}
+			// Deu problema no reconhecimento dos campos
+			else {
+				$this->setFlash('Ocorreu um erro ou o arquivo não é válido. Por favor, tente novamente.', 'error');
+				$this->redirect('/mycards/import');
+			}
+		}
+	}
 	
 	public function remove() {
 		if (!isset($this->request->data['id_card']))

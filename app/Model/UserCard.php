@@ -21,7 +21,7 @@ class UserCard extends AppModel {
 				'id_card' => $card,
 			),
 			'fields' => array(
-				'(SUM(quantity) + SUM(have_list)) AS total'
+				'SUM(quantity) AS total'
 			),
 		));
 		

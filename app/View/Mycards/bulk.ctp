@@ -22,9 +22,14 @@
 			</p>
 			<p>É importante ressaltar que nosso banco de dados não compreende todas
 				as cartas de Magic, portanto é possível que algumas não sejam
-				reconhecidas devido à sua ausência no site.</p>
+				reconhecidas devido à sua ausência no site.
+			</p>
 			<p><strong>Importante:</strong> se alguma dessas já estiver em sua coleção,
-				ela será ignorada.</p>
+				ela será ignorada.
+			</p>
+			<p>
+				Ajustes podem ser feitos no pé da página.
+			</p>
 		</div>
         <div class="box-body">
 			<table class="table table-bordered">
