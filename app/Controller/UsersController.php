@@ -95,9 +95,6 @@ class UsersController extends AppController {
 			if (isset($this->request->data['User']['persist']) && $this->request->data['User']['persist'])
 				$this->makePersist();
 			
-			// Grava o username na sessão pra ser usado pelo chat
-			$this->Session->write('username', $this->Auth->user('username'));
-			
 			// Redireciona :)
 	        $this->redirect($this->Auth->redirect());
 	    } elseif ($this->request->data) {

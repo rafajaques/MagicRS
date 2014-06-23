@@ -48,20 +48,17 @@ class AppController extends Controller {
 	function beforeFilter() {
 		// Verifica o cookie de autenticação
 		if ($this->Cookie->check('mtgrsp') && !$this->Auth->user()) {
-			$autoLogin = $this->User->findAllByPersistent($this->Cookie->read('mtgrsp'));
-
-			// Checa se alguém modificou o cookie
-			if (count($autoLogin) > 1)
-				$this->Cookie->delete('mtgrsp');
-			// Autentica o indivíduo :)
-			elseif ($autoLogin)
-				$this->Auth->login($autoLogin[0]['User']);
+			$this->persistLogin();
 		}
 		
 		// Se temos um usuário autenticado...
 		if ($user = $this->Auth->user()) {
 			$this->set('user', $user);
 			$this->set('avatar', $this->User->getAvatar($user['id']));
+			
+			// Para uso do chat
+			if (!$this->Session->read('username'))
+				$this->Session->write('username', $this->Auth->user('username'));
 			
 			// Last seen + renew persist
 			# $this->User->heartbeat($user);
@@ -90,5 +87,16 @@ class AppController extends Controller {
 	
 	public function setFlash($msg, $type) {
 		return $this->Session->setFlash($msg, 'default', array(), $type);
+	}
+	
+	public function persistLogin() {
+		$autoLogin = $this->User->findAllByPersistent($this->Cookie->read('mtgrsp'));
+
+		// Checa se alguém modificou o cookie
+		if (count($autoLogin) > 1)
+			$this->Cookie->delete('mtgrsp');
+		// Autentica o indivíduo :)
+		elseif ($autoLogin)
+			$this->Auth->login($autoLogin[0]['User']);
 	}
 }

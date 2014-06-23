@@ -348,13 +348,21 @@ $searchForm = '                    <!-- search form -->
 					<div class="alert alert-danger alert-dismissable">
                         <i class="fa fa-ban"></i>
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                        <b><?php echo __('Erro!')?></b> <?php echo $flash; ?>
+                        <b>Erro!</b> <?php echo $flash; ?>
                     </div>
 					<?php } ?>
 					
 					<?php if ($flash = $this->Session->flash('success')) { ?>
 					<div class="alert alert-success alert-dismissable">
                         <i class="fa fa-check"></i>
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <?php echo $flash; ?>
+                    </div>
+					<?php } ?>
+					
+					<?php if ($flash = $this->Session->flash('info')) { ?>
+					<div class="alert alert-info alert-dismissable">
+                        <i class="fa fa-info"></i>
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                         <?php echo $flash; ?>
                     </div>

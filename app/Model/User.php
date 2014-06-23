@@ -186,4 +186,37 @@ class User extends AppModel {
 		return $out;
 	}
 	
+	public function linkFacebook($id_user, $fb_id) {
+		$this->updateAll(
+			array('fb_id' => "'{$fb_id}'"),
+			array('id' => $id_user)
+		);
+	}
+	
+	public function authFacebookFriends($id_user) {
+		$this->updateAll(
+			array('fb_friends' => 1),
+			array('id' => $id_user)
+		);	
+	}
+	
+	public function isFacebookLinked($id_user) {
+		$id_user = intval($id_user);
+		return (bool) $this->find('first', array(
+			'conditions' => array(
+				'id' => $id_user,
+				'fb_id IS NOT NULL',
+			),
+		));
+	}
+	
+	public function isFacebookFriendsAuth($id_user) {
+		$id_user = intval($id_user);
+		return (bool) $this->find('first', array(
+			'conditions' => array(
+				'id' => $id_user,
+				'fb_friends IS NOT NULL',
+			),
+		));
+	}
 }
