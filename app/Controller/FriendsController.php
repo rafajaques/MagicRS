@@ -12,14 +12,13 @@ class FriendsController extends AppController {
 	public function index() {
 		$this->set('section_for_layout', 'Lista de amigos');
 
+		// Listagem de amigos
 		$friends = $this->User->getFriends($this->Auth->user('id'));
-		
-		foreach ($friends as $k => $v) {
+		foreach ($friends as $k => $v)
 			$friends[$k]['online'] = $this->User->isOnline($v['User']['id']);
-		}
-
 		$this->set('friends', $friends);
 
+		// Resultados da busca
 		if (isset($this->request->data['search'])) {
 			$words = explode(' ', $this->request->data['search']);
 			
@@ -43,11 +42,18 @@ class FriendsController extends AppController {
 					'User.surname',
 					'User.username',
 					'City.name as city_name',
-				)
+				),
+				'order' => array(
+					'User.name',
+					'User.surname',
+				),
 			));
 			
 			$this->set('s_result', $s_result);
 		}
+		
+		// Busca amigos do Facebook
+		$this->set('fb_friends', $this->User->getFacebookFriends());
 	}
 	
 	public function add($friend_id = null) {

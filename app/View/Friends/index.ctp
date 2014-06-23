@@ -10,6 +10,8 @@
 <!-- Esquerda -->
 <!-- Busca -->
 <section class="col-lg-5">
+	
+	<!-- Busca -->
 	<div class="box box-primary">
         <div class="box-header">
             <h3 class="box-title"><i class="fa fa-male"></i> Buscar pessoas</h3>
@@ -30,6 +32,7 @@
 				</div><!-- /input-group -->
 			</form>
 			
+			<!-- Resultados -->
 			<?php
 				if (isset($s_result)):
 			?>
@@ -84,6 +87,56 @@
 			?>
 		</div>
     </div>
+	
+	<div class="box box-info">
+        <div class="box-header">
+            <h3 class="box-title"><i class="fa fa-facebook"></i> Amigos do Facebook</h3>
+        </div>
+        <div class="box-body text-center">
+			<?php
+				// Maravilha! Temos amigos no facebook!
+				if ($fb_friends):
+			?>
+			<div class="box-body no-padding">
+	            <table class="table table-condensed">
+	                <tbody><tr>
+	                    <th style="width: 10px">&nbsp;</th>
+	                    <th>Nome</th>
+	                </tr>
+					<?php
+					foreach ($fb_friends as $f):
+						$id = $f['User']['id'];
+						$name = $f['User']['name'].' '.$f['User']['surname'];
+						$nick = $f['User']['username'];
+						?>
+
+	                <tr>
+	                    <td><img src="<?php echo $this->User->getAvatar($id); ?>" width="70"></td>
+	                    <td>
+							<a href="/profile/view/<?php echo $id; ?>">
+								<?php echo $name; ?>
+							</a> (<?php echo $nick; ?>)
+						</td>
+	                </tr>
+					<?php
+					endforeach;
+					?>
+	            </tbody>
+			</table>
+	       </div>
+			<?php
+				elseif (is_array($fb_friends) && !count($fb_friends)):
+			?>
+			<p>Você não possui nenhum amigo do Facebook no Magic RS.</p>
+			<?php
+				else:
+			?>
+			<p>Sua conta não está vinculada ao Facebook ou não temos permissão de acessar sua lista de amigos. <a href="/facebook">Clique aqui para vincular</a>.
+			<?php
+				endif;
+			?>
+		</div>
+	</div>
 </section>
 
 <!-- Direita -->

@@ -1,6 +1,7 @@
 <?php
 
 App::uses('AuthComponent', 'Controller/Component');
+App::uses('CakeSession', 'Model/Datasource');
 
 class User extends AppModel {
     public $name = 'User';
@@ -130,6 +131,10 @@ class User extends AppModel {
 				'User.*',
 				'City.name as city_name',
 			),
+			'order' => array(
+				'User.name',
+				'User.surname',
+			),
 		));
 	}
 	
@@ -218,5 +223,82 @@ class User extends AppModel {
 				'fb_friends IS NOT NULL',
 			),
 		));
+	}
+
+	/**
+	 * @TODO passar essa rotina de retoken para uma classe específica
+	 */
+	public function getFacebookFriends() {
+		$user = CakeSession::read('Auth.User');
+		$user_id = $user['id'];
+
+		require('../Facebook/StartFacebook.php');
+		
+		// Verifica se um novo token foi gerado
+		if (isset($_GET['retoken'])) {
+			$reToken = 'http://' . $_SERVER['HTTP_HOST'] . strtok($_SERVER["REQUEST_URI"],'?') . '?retoken=1';
+			$helper = new Facebook\FacebookRedirectLoginHelper($reToken);
+
+			try {
+				$session = $helper->getSessionFromRedirect();
+			} catch(FacebookRequestException $ex) {
+				echo 'erro 1';
+			} catch(\Exception $ex) {
+				debug($ex);
+			}
+			if ($session) {
+				CakeSession::write('fbToken', $session->getToken());
+			}
+		}
+		
+		// Não temos token
+		if ($user['fb_friends'] && !$fbToken = CakeSession::read('fbToken')) {
+			$session = new Facebook\FacebookSession($fbToken);
+			$request = new Facebook\FacebookRequest($session, 'GET', '/me');
+
+			try {
+				$response = $request->execute();
+			}
+			// OMG! Nosso token não é válido!
+			catch (Exception $e) {
+				// Bora lá buscar um token novo
+				CakeSession::delete('fbToken');
+				$reToken = 'http://' . $_SERVER['HTTP_HOST'] . strtok($_SERVER["REQUEST_URI"],'?') . '?retoken=1';
+				$helper = new Facebook\FacebookRedirectLoginHelper($reToken);
+				header('location:'.$helper->getLoginUrl());
+				die;
+			}
+			
+			$go = $response->getGraphObject()->asArray();
+		}
+		
+		// Finalmente recupera os dados dos amigos
+		if ($fbToken = CakeSession::read('fbToken')) {
+			$session = new Facebook\FacebookSession($fbToken);
+			$request = new Facebook\FacebookRequest($session, 'GET', '/me/friends');
+			$friends = $request->execute();
+			$friends = $friends->getGraphObject()->asArray();
+			
+			
+			// Encontramos amigos! :)
+			if (isset($friends['data']) && count($friends['data'])) {
+				
+				// Juntamos os IDs
+				$ids = array();
+				foreach ($friends['data'] as $friend)
+					$ids[] = $friend->id;
+				
+				return $this->find('all', array(
+					'conditions' => array(
+						'fb_id' => $ids,
+					),
+				));
+			}
+			// Ninguém!
+			else
+				return array();
+		} else {
+			return false;
+		}
 	}
 }

@@ -283,6 +283,11 @@ $searchForm = '                    <!-- search form -->
                                 <i class="fa fa-user"></i> <span>Meu perfil</span>
                             </a>
                         </li>
+                        <li<?php if ($this->params['controller'] == 'settings') echo ' class="active"'; ?>>
+                            <a href="/settings">
+                                <i class="fa fa-cog"></i> <span>Preferências</span>
+                            </a>
+                        </li>
                         <li>
                             <a href="/users/logout">
                                 <i class="fa fa-sign-out"></i> <span>Sair</span>

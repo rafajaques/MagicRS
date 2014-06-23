@@ -6,6 +6,7 @@ function statusChangeCallback(response) {
     // Logged into your app and Facebook.
     //saveToken();
 	console.log('Facebook OK');
+	console.log(response);
   } else {
   	console.log('Facebook problem');
   }
@@ -46,5 +47,6 @@ FB.getLoginStatus(function(response) {
 function saveToken() {
   FB.api('/me', function(response) {
     console.log('Login com sucesso de: ' + response.name);
+	//console.log();
   });
 }

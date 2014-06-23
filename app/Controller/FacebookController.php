@@ -12,12 +12,40 @@ class FacebookController extends AppController {
 	public function index() {
 		$this->set('section_for_layout', 'Facebook');
 
+		// Recebemos um novo token! \o/
+		if (isset($this->request->query['retoken'])) {
+			$helper = new Facebook\FacebookRedirectLoginHelper(Router::url($this->request->here . '?retoken=1', true));
+
+			try {
+				$session = $helper->getSessionFromRedirect();
+			} catch(FacebookRequestException $ex) {
+				// When Facebook returns an error
+			} catch(\Exception $ex) {
+				// When validation fails or other local issues
+			}
+			if ($session) {
+				$this->Session->write('fbToken', $session->getToken());
+			}
+		}
+
 		// Logado no facebook?
 		if ($fbToken = $this->Session->read('fbToken')) {
 			require('../Facebook/StartFacebook.php');
 			$session = new Facebook\FacebookSession($fbToken);
 			$request = new Facebook\FacebookRequest($session, 'GET', '/me');
-			$response = $request->execute();
+
+			try {
+				$response = $request->execute();
+			}
+			// OMG! Nosso token não é válido!
+			catch (Exception $e) {
+				// Bora lá buscar um token novo
+				$this->Session->delete('fbToken');
+				$reToken = Router::url($this->request->here . '?retoken=1', true);
+				$helper = new Facebook\FacebookRedirectLoginHelper($reToken);
+				$this->redirect($helper->getLoginUrl());
+			}
+			
 			$go = $response->getGraphObject()->asArray();
 			$fbId = $go['id'];
 		}

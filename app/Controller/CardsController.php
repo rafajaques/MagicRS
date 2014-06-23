@@ -148,7 +148,6 @@ class CardsController extends AppController {
 			$avg_price = NULL;
 		}
 		$this->set('avg_price', $avg_price);
-		#$this->set('avg_price', 1);
 	}
 	
 	public function ajax() {
