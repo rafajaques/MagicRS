@@ -38,6 +38,14 @@
 			        <th>O quê?</th>
 			    </tr>
 				<tr>
+			        <th>23 de Junho</th>
+			        <td>
+			        	<ul>
+							<li>Adicionado vínculo da conta Magic RS ao Facebook.</li>
+						</ul>
+					</td>
+				</tr>
+				<tr>
 			        <th>20 de Junho</th>
 			        <td>
 			        	<ul>
