@@ -95,12 +95,13 @@ class Card extends AppModel {
 	 * Se não encontrar, procura a carta sem o setname
 	 * Se não der mesmo assim, retorna falso
 	 */
-	public function match($card) {
-		return (bool) $this->find('first', array(
-			'condtions' => array(
-				'Card.name_en' => $card['name_en'],
-				'Set.name_en' => $card['set_name_en'],
-			),
+	public function match($card, $ignore_set = false) {
+		
+		$conditions['Card.name_en'] = $card['name_en'];
+		if (!$ignore_set) $conditions['Set.name_en'] = $card['set_name_en'];
+		
+		$out = $this->find('first', array(
+			'conditions' => $conditions,
 			'joins' => array(
 				array(
 					'table' => 'sets',
@@ -109,7 +110,10 @@ class Card extends AppModel {
 					'conditions' => array('Card.id_set = Set.id'),
 				),
 			),
+			'order' => 'Set.release DESC',
 		));
+
+		return $out ? $out['Card'] : false;
 	}
 	
 	public function suggest($str, $limit = 10) {

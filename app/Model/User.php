@@ -292,6 +292,9 @@ class User extends AppModel {
 					'conditions' => array(
 						'fb_id' => $ids,
 					),
+					'order' => array(
+						'name',
+					),
 				));
 			}
 			// Ninguém!

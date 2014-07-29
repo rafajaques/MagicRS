@@ -8,7 +8,7 @@
 
 			<p>
 				Aqui você pode importar sua lista de cartas do <a href="http://deckbox.org" target="_blank">deckbox.org</a>.<br>
-				Envie o arquivo exportado e aguarde até que a importação esteja pronta. Depois apenas confirme a gravação dos dados.<br>
+				Envie o arquivo exportado e aguarde até que a importação esteja pronta. <!--Depois apenas confirme a gravação dos dados.--><br>
 				Caso alguma edição não seja encontrada no banco de dados, a edição mais recente será tomada como padrão.
 			</p>
 			<p>

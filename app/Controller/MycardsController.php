@@ -50,6 +50,12 @@ class MycardsController extends AppController {
 		$this->set('collec', $collec);
 		$this->set('have_list_count', $this->UserCard->haveListCount($this->Auth->user('id')));
 		$this->set('want_list_count', $this->WantList->wantListCount($this->Auth->user('id')));
+
+		// Verifica se houve importação e cartas ignoradas
+		if ($ignoredImport = $this->Session->read('CardImport.ignored')) {
+			$this->set('ignored_import', $ignoredImport);
+			$this->Session->delete('CardImport.ignored');
+		}
 	}
 	
 	public function add() {
@@ -226,6 +232,7 @@ class MycardsController extends AppController {
 				$header = fgetcsv($csv);
 				$h = array();
 				
+				// Headers
 				foreach ($header as $k => $v) {
 					switch ($v) {
 						case 'Count':
@@ -255,7 +262,9 @@ class MycardsController extends AppController {
 				// Prepara os statements
 				$imports = array();
 				while ($c = fgetcsv($csv)) {
-					if (!isset($c[$h['name_en']]) || empty($c[$h['name_en']]))
+					if (!isset($c[$h['name_en']])
+						|| empty($c[$h['name_en']])
+						|| in_array($c[$h['name_en']], array('Plains', 'Island', 'Mountain', 'Swamp', 'Forest')))
 						continue;
 					
 					$out = array(
@@ -265,31 +274,63 @@ class MycardsController extends AppController {
 						'foil' => isset($c[$h['foil']]) && $c[$h['foil']] ? 1 : 0,
 						'set_name_en' => isset($c[$h['set_name_en']]) ? $c[$h['set_name_en']] : '',
 					);
-					$imports[] = $out;
+					
+					// Verifica se essa carta já está na lista e então apenas mescla
+					$skip = false;
+					
+					foreach ($imports as &$v) {
+						if ($v['name_en'] == $out['name_en'] &&
+						    $v['foil'] == $out['foil'] &&
+						    $v['set_name_en'] == $out['set_name_en']) {
+							
+							$v['quantity'] += $out['quantity'];
+							$v['have_list'] += $out['have_list'];
+							$skip = true;
+							break;
+							
+						}
+					}
+					if (!$skip)
+						$imports[] = $out;
 				}
 				
 				fclose($csv);
 				
-				debug($imports);die;
-				
-				$saved = $ignore = 0;
+				$saved = 0;
+				$ignored = array();
 				
 				$id_user = $this->Auth->user('id');
+				$now = date('Y-m-d H:i:s');
 				
 				// Realiza as importações
 				foreach ($imports as $c) {
-					if ($id_card = $this->Card->match($c) && !$this->UserCard->hasCard($id_user, $c['id_card'])) {
+
+					// Se não achar a carta, tenta sem o set
+					if (!$card = $this->Card->match($c))
+						// Ignore set = true
+						$card = $this->Card->match($c, true);
+					
+					if ($card && !$this->UserCard->hasCard($id_user, $card['id'])) {
 						$uc = $this->UserCard->create();
-						$data = array('UserCard' => $c);
-			
-						$this->UserCard->save($data);
+
+						$data = array('UserCard' => array(
+							'id_user' => $id_user,
+							'id_card' => $card['id'],
+							'foil' => $c['foil'],
+							'quantity' => $c['quantity'],
+							'have_list' => $c['have_list'],
+							'added' => $now,
+						));
+						
 						$saved++;
+						$this->UserCard->save($data);
 					} else {
-						$ignored++;
+						$ignored[] = $c['name_en'];
 					}
 				}
-				
-				$this->setFlash("Cartas inseridas com sucesso. <small>(Salvas: {$saved} - Ignoradas: {$ignored})</small>", 'success');
+				$this->Session->write('CardImport.ignored', $ignored);
+				$ignored_count = count($ignored);
+				$this->setFlash("Cartas importadas com sucesso. <small>(Salvas: {$saved} - Ignoradas: {$ignored_count})</small>", 'success');
 				$this->redirect('/mycards');
 			}
 			// Deu problema no reconhecimento dos campos

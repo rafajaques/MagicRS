@@ -1,3 +1,9 @@
+<?php if (isset($ignored_import)): ?>
+<p>
+<a data-toggle="modal" href="#ignored" class="btn btn-block btn-danger">Clique aqui para visualizar a lista de cartas ignoradas</a>
+</p>
+<?php endif; ?>
+
 <!-- MyCards/index.ctp -->
 <!-- Esquerda -->
 <section class="col-lg-6">
@@ -135,6 +141,29 @@
     </div>
 
 </section><!-- /.content -->
+
+<?php if (isset($ignored_import)): ?>
+<!-- Modal - ignored -->
+<div class="modal fade" id="ignored" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4 class="modal-title">Lista de cartas ignoradas na importação</h4>
+    </div>
+    <div class="modal-body">
+		<ul>
+		<?php foreach ($ignored_import as $c) echo "<li>{$c}</li>"; ?>
+		</ul>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+      <!--input type="submit" class="btn btn-primary" value="Buscar"-->
+    </div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<?php endif; ?>
 
 <!-- DATA TABES SCRIPT -->
 <script src="/js/plugins/datatables/jquery.dataTables.js" type="text/javascript"></script>
